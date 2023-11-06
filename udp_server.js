@@ -1,4 +1,4 @@
-const cv = require("opencv4nodejs");
+const cv = require("@u4/opencv4nodejs");
 
 const dgram = require("node:dgram");
 const log = console.log;
