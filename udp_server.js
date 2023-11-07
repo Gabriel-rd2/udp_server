@@ -37,7 +37,7 @@ const start_server = () => {
     const faceRects = classifier.detectMultiScale(image).objects;
     if (faceRects.length) {
       for (let faceRect of faceRects) {
-        image.drawRectangle(faceRect, new cv.Vec(0, 0, 255), 1, cv.LINE_AA);
+        image.drawRectangle(faceRect, new cv.Vec(0, 255, 0), 0.5, cv.LINE_AA);
       }
     }
 
