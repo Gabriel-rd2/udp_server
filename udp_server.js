@@ -31,7 +31,7 @@ const start_server = () => {
       `Received ${msg.length} bytes from ${info.address}:${info.port}`
     );
 
-    let json = msg.buffer.toJson();
+    const json = JSON.parse(msg.buffer.toString());
     let buf = Buffer.from(json.image);
     let image = cv.imdecode(buf);
 
