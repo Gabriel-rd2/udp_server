@@ -3,7 +3,6 @@ const cv = require("@u4/opencv4nodejs");
 
 const dgram = require("node:dgram");
 const log = console.log;
-// const { log } = require("./util/loggerTool");
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 
@@ -43,8 +42,10 @@ const start_server = () => {
       }
     }
 
-    const responseImage = cv.imencode(".jpg", image).toString("base64");
-    const data = Buffer.from(responseImage, "base64");
+    const data = JSON.stringify({
+      order: message.order,
+      image: cv.imencode(".jpg", image).toString("base64"),
+    });
 
     //sending msg
     server.send(data, info.port, info.address, (error, bytes) => {
