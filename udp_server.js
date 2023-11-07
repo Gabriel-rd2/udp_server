@@ -1,4 +1,5 @@
 const cv = require("@u4/opencv4nodejs");
+// const cv = require("opencv4nodejs");
 
 const dgram = require("node:dgram");
 const log = console.log;
@@ -31,14 +32,13 @@ const start_server = () => {
       `Received ${msg.length} bytes from ${info.address}:${info.port}`
     );
 
-    const json = JSON.parse(msg.buffer.toString());
-    let buf = Buffer.from(json.image);
+    let buf = Buffer.from(msg.buffer);
     let image = cv.imdecode(buf);
 
     const faceRects = classifier.detectMultiScale(image).objects;
     if (faceRects.length) {
       for (let faceRect of faceRects) {
-        image.drawRectangle(faceRect, new cv.Vec(0, 255, 0), 0.5, cv.LINE_AA);
+        image.drawRectangle(faceRect, new cv.Vec(0, 255, 0), 1, cv.LINE_AA);
       }
     }
 
