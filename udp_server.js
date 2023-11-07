@@ -32,7 +32,8 @@ const start_server = () => {
       `Received ${msg.length} bytes from ${info.address}:${info.port}`
     );
 
-    let buf = Buffer.from(msg.buffer);
+    const message = JSON.parse(msg.toString());
+    let buf = Buffer.from(message.image, "base64");
     let image = cv.imdecode(buf);
 
     const faceRects = classifier.detectMultiScale(image).objects;
