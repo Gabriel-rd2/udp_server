@@ -111,42 +111,36 @@
     ></iframe>
 
     <h3>O servidor</h3>
+    <p>
+      que recebe mídia do cliente, processa a imagem para identificação de
+      rostos e envia a imagem processada de volta para o cliente. A biblioteca
+      "opencv4nodejs" é utilizada para para manipulação de imagens, no caso do
+      cliente para captura e visualização dos frames. A biblioteca "dgram"
+      permite a criação de um socket UDP. A biblioteca "ip" é usada paenas para
+      pegar o endereço ip local.
+    </p>
+    <p>
+      A configuração do servidor é definida com base no endereço IP local do
+      host e na porta 41234. O servidor mantém um registro dos endereços IP dos
+      clientes atendidos em um array denominado "clients".
+    </p>
 
     <p>
-      O código em questão é um servidor UDP que recebe mídia do cliente,
-      processa a imagem para identificação de rostos e envia a imagem processada
-      de volta para o cliente. Este servidor foi desenvolvido como parte do
-      estudo da disciplina de Redes de Computadores II, sob a orientação do
-      Professor Elias P. Duarte Jr., e foi implementado pelo aluno Gabriel de
-      Almeida Sales Evaristo. Inicialmente, o código realiza a importação das
-      bibliotecas necessárias para seu funcionamento. Utiliza a biblioteca
-      "opencv4nodejs" para manipulação de imagens e reconhecimento facial, e
-      "node:dgram" para permitir a comunicação via protocolo UDP. Além disso,
-      faz uso da biblioteca "ip" para manipulação de endereços IP. A
-      configuração do servidor é definida com base no endereço IP local do host
-      e na porta 41234, permitindo que o servidor possa ser acessível por
-      clientes na mesma rede. O servidor mantém um registro dos endereços IP dos
-      clientes atendidos em um array denominado "clients". Ao iniciar o
-      servidor, são registrados diversos eventos para lidar com as diferentes
-      situações possíveis. O evento "listening" ocorre quando o servidor começa
-      a ouvir conexões, exibindo informações sobre o endereço e porta em que
-      está ativo. No evento "message", o servidor processa as mensagens
-      recebidas dos clientes. Recebe uma imagem codificada em base64, a
-      decodifica em um objeto OpenCV e realiza a detecção de rostos nessa
-      imagem. Em seguida, desenha retângulos ao redor dos rostos detectados. O
-      servidor prepara os dados da imagem processada e envia de volta para o
-      cliente. O servidor também monitora eventos de erro e de fechamento do
-      socket para gerenciar possíveis problemas durante a execução do programa.
-      Em caso de erro, é exibida uma mensagem indicando o problema e o socket é
-      fechado. Quando o socket é fechado, é exibido o número de clientes
-      atendidos e encerra-se a execução do programa. Ao ser inicializado, o
-      servidor exibe informações sobre o início da execução, incluindo detalhes
-      sobre a disciplina, o professor responsável e os dados do aluno
-      responsável pelo código. Todo o processo descrito é feito através da
-      chamada da função "start_server", que configura e inicia o servidor UDP
-      para lidar com a comunicação de mídia e reconhecimento facial entre
-      clientes e servidor.
+      Ao iniciar o servidor, são registrados diversos eventos para lidar com as
+      diferentes situações possíveis.<br />
+      O evento "listening" ocorre quando o servidor começa a ouvir conexões,
+      exibindo informações sobre o endereço e porta em que está ativo.<br />
+      <br />
     </p>
+
+    <p>
+      Na função callback para o evento "message" o servidor processa as
+      mensagens recebidas dos clientes. Ele pega o frame recebido, o decodifica
+      em um objeto OpenCV e realiza a detecção de rostos nessa imagem. Em
+      seguida, desenha retângulos ao redor dos rostos encontrados. O servidor
+      prepara os dados da imagem processada e envia de volta para o cliente.
+    </p>
+
     <p>
       A seguir temos o código de
       <a
