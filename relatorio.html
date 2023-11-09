@@ -54,43 +54,54 @@
     <img src="" alt="Diagrama de sequencia trabalho de redes2" />
 
     <hr />
-    <h3>Códigos</h3>
+    <h3>O cliente</h3>
     <p>
-      O cliente UDP captura uma mídia, seja a webcam ou um vídeo de alguma pasta
-      e a envia frame a frame para o servidor. O programa usa algumas
-      bibliotecas necessárias, como a "opencv4nodejs" para manipulação de
-      imagens e a "dgram" para comunicação via protocolo UDP. Em seguida, são
-      definidas variáveis de controle, como o endereço e porta do servidor UDP,
-      bem como parâmetros como a fonte de vídeo, o atraso (delay) e a duração do
-      envio da mídia. A lógica principal do código está encapsulada na função
-      assíncrona start_client(), que é a responsável por iniciar a comunicação
-      com o servidor e o envio da mídia. Ela instancia um socket UDP, registra
-      um callback para lidar com as mensagens recebidas e configura a fonte de
-      vídeo (que pode ser a webcam ou um arquivo de vídeo especificado). Dentro
-      do loop de envio de vídeo, cada frame capturado é codificado como uma
-      mensagem em formato JSON e enviada para o servidor por meio do socket UDP.
-      Há um mecanismo de atraso entre os envios para atingir uma taxa de quadros
-      desejada, baseado no valor de FPS configurado. A função callback para o
-      evento "message" lida com as respostas recebidas do servidor. Ela processa
-      as mensagens, extrai a ordem e a imagem correspondente, as exibe e
-      verifica se as respostas estão fora de ordem, mantendo estatísticas sobre
-      pacotes perdidos e fora de ordem. Ao final da execução do envio de mídia,
-      o código finaliza a janela de visualização, fecha o socket e exibe
-      estatísticas detalhadas sobre o desempenho da transmissão, como a
-      quantidade de pacotes perdidos e fora de ordem. O código proporciona uma
-      estrutura para envio de mídia via UDP, permitindo o controle de parâmetros
-      e a análise estatística do desempenho do envio em termos de integridade
-      dos pacotes recebidos. É possível ajustar as configurações para alcançar
-      diferentes taxas de quadros e durações de transmissão, atendendo às
-      necessidades específicas de transmissão de mídia para um servidor remoto.
+      O cliente UDP captura uma mídia e a envia frame a frame para o servidor. A
+      biblioteca "opencv4nodejs" é utilizada para para manipulação de imagens,
+      no caso do cliente para captura e visualização dos frames. A biblioteca
+      "dgram" permite a criação de um socket UDP. A biblioteca "ip" é usada
+      paenas para pegar o endereço ip local.
+    </p>
+    <p>
+      O cliente recebe alguns argumentos de entrada: "--fps", define a taxa de
+      quadros, que é convertida para a variável "delay" que é usada por um
+      mecanismo de sleep no loop de envio de mensagens, controlando a frequência
+      na qual elas são enviadas ao servidor; "--duration", define a duração do
+      loop de transmissão, caso "duration" não seja definido o cliente continua
+      no loop até a tecla ESC ser apertada; por último, "--source" define o
+      local de vídeo capturado, caso seja omitido, a webcam é utilizada.
+    </p>
+    <p>
+      A lógica principal do código está encapsulada na função assíncrona
+      start_client(), que é a responsável por iniciar a comunicação com o
+      servidor e o envio da mídia. Ela instancia um socket UDP, registra um
+      callback para lidar com as mensagens recebidas e configura a fonte de
+      vídeo.<br />
+    </p>
+    <p>
+      Dentro do loop de envio de vídeo, cada frame capturado é codificado como
+      uma mensagem em formato JSON e enviada para o servidor por meio do socket
+      UDP. <br />
+    </p>
+    <p>
+      A função callback para o evento "message" lida com as respostas recebidas
+      do servidor. Ela processa as mensagens, extrai a ordem e a imagem
+      correspondente, as exibe e verifica se as respostas estão fora de ordem,
+      mantendo estatísticas sobre pacotes perdidos e fora de ordem. <br />Ao
+      final da execução do envio de mídia, o código finaliza a janela de
+      visualização, fecha o socket e exibe estatísticas detalhadas sobre o
+      desempenho da transmissão, a quantidade de pacotes perdidos e fora de
+      ordem.
     </p>
 
     <p>
+      A seguir temos o código de
       <a
         href="https://raw.githubusercontent.com/Gabriel-rd2/udp_client/master/udp_client.js"
       >
         udp_client.js
       </a>
+      :
     </p>
     <iframe
       src="https://drive.google.com/file/d/1fRzu1V-0NZxSTfbNtqHTWbbJIYsGqDmV/preview"
@@ -99,19 +110,7 @@
       allow="autoplay"
     ></iframe>
 
-    <p>
-      <a
-        href="https://raw.githubusercontent.com/Gabriel-rd2/udp_server/master/udp_server.js"
-      >
-        udp_server.js
-      </a>
-    </p>
-    <iframe
-      src="https://drive.google.com/file/d/1FtKaLmChBCJmPdwonBeN5-1yeMiKQP8q/preview"
-      width="100%"
-      height="480"
-      allow="autoplay"
-    ></iframe>
+    <h3>O servidor</h3>
 
     <p>
       O código em questão é um servidor UDP que recebe mídia do cliente,
@@ -148,8 +147,71 @@
       para lidar com a comunicação de mídia e reconhecimento facial entre
       clientes e servidor.
     </p>
+    <p>
+      A seguir temos o código de
+      <a
+        href="https://raw.githubusercontent.com/Gabriel-rd2/udp_server/master/udp_server.js"
+      >
+        udp_server.js
+      </a>
+      :
+    </p>
+    <iframe
+      src="https://drive.google.com/file/d/1FtKaLmChBCJmPdwonBeN5-1yeMiKQP8q/preview"
+      width="100%"
+      height="480"
+      allow="autoplay"
+    ></iframe>
+    <hr />
+
+    <p>
+      O código do servidor, assim como esse relatório foram colocados em uma
+      máquina virtual na cloud da Digital Ocean. A VM tem 512 MB de memória, 10
+      GB de disco e roda Ubuntu 22.04 (LTS) x64.
+    </p>
+    <p>
+      A biblioteca "pm2" foi utilizada para criar processos com o servidor UDP
+      para utilização com o trabalho e com um servidor HTTP para servir o html
+      do relatório.
+    </p>
 
     <hr />
     <h3>Logs</h3>
+    <p>
+      A seguir temos o código de
+      <a
+        href="https://raw.githubusercontent.com/Gabriel-rd2/udp_server/master/udp_server.js"
+      >
+        udp_server.js
+      </a>
+      :
+    </p>
+    <iframe
+      src="https://drive.google.com/file/d/1FtKaLmChBCJmPdwonBeN5-1yeMiKQP8q/preview"
+      width="100%"
+      height="480"
+      allow="autoplay"
+    ></iframe>
+
+    <hr />
+    <h3>Repositórios</h3>
+    <p>
+      <a
+        href="https://github.com/Gabriel-rd2/udp_client"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        udp_client
+      </a>
+      &emsp;
+      <a
+        href="https://github.com/Gabriel-rd2/udp_server"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        udp_server
+      </a>
+    </p>
+    <hr />
   </body>
 </html>
