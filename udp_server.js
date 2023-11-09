@@ -8,7 +8,7 @@
 const cv = require("@u4/opencv4nodejs"); // manipulação de imagens
 const ip = require("ip"); // manipulação de endereços IP
 const dgram = require("node:dgram"); // comunicação via UDP
-const { Buffer } = require("node:buffer");
+const { Buffer } = require("node:buffer"); // manipulação de buffers de dados
 
 // Definição da configuração do servidor
 const conf = {

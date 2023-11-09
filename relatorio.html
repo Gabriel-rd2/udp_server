@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Relatório do Trabalho de Redes II - 2023/2</title>
+    <meta
+      name="description"
+      content="Relatorio do trabalho de redes 2 (2023/2)"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+  </head>
+  <body>
+    <h1>Relatório do Trabalho de Redes II - 2023/2</h1>
+    <p><b>Aluna:</b> Gabriel de Almeida Sales Evaristo - GRR20165266</p>
+    <hr />
+    <h3>Arquitetura do Trabalho</h3>
+    <p>
+      O trabalho foi escrito em javascript, utilizando o ambiente NodeJS
+      (v21.1.0) para rodar os programas.
+    </p>
+
+    <p>
+      Foram criados um cliente UDP e um servidor UDP. A estrutura do trabalho é
+      ilustrada na figura abaixo.
+    </p>
+    <img src="" alt="Diagrama da arquitetura do trabalho de redes2" />
+
+    <p>
+      São instanciados diversos clientes na maquina local, que se conectam com o
+      servidor UDP. Durante o teste, o cliente entra em um loop onde envia um
+      frame de alguma mídia (webcam ou vídeo) para o servidor, que então utiliza
+      um classificador para marcar uma regiao retângular que provavelmente
+      possui um rosto na imagem recebida e a envia de volta para o cliente, que
+      então mostra a imagem na tela.
+    </p>
+    <p>
+      O servidor recebe e trata as mensagem por meio de eventos, que são gerados
+      quando o cliente envia uma mensagem. O NodeJS faz a gestão de enfileirar a
+      chamada das funções relacionadas com esses eventos, assim, o servidor é
+      capaz de tratar diversos clientes simultaneamente.
+    </p>
+    <p>
+      A resposta do servidor também é tratada por eventos pelos clientes, e por
+      causa da gestão de execuções do Node, o cliente consegue tratar eventos e
+      ainda continuar executando o laço de envio dos frames.
+    </p>
+    <p>A imagem abaixo ilustra como esses programas funcionam juntos.</p>
+    <img src="" alt="Diagrama de sequencia trabalho de redes2" />
+
+    <hr />
+    <h3>Códigos</h3>
+    <p>
+      O cliente UDP captura uma mídia, seja a webcam ou um vídeo de alguma pasta
+      e a envia frame a frame para o servidor. O programa usa algumas
+      bibliotecas necessárias, como a "opencv4nodejs" para manipulação de
+      imagens e a "dgram" para comunicação via protocolo UDP. Em seguida, são
+      definidas variáveis de controle, como o endereço e porta do servidor UDP,
+      bem como parâmetros como a fonte de vídeo, o atraso (delay) e a duração do
+      envio da mídia. A lógica principal do código está encapsulada na função
+      assíncrona start_client(), que é a responsável por iniciar a comunicação
+      com o servidor e o envio da mídia. Ela instancia um socket UDP, registra
+      um callback para lidar com as mensagens recebidas e configura a fonte de
+      vídeo (que pode ser a webcam ou um arquivo de vídeo especificado). Dentro
+      do loop de envio de vídeo, cada frame capturado é codificado como uma
+      mensagem em formato JSON e enviada para o servidor por meio do socket UDP.
+      Há um mecanismo de atraso entre os envios para atingir uma taxa de quadros
+      desejada, baseado no valor de FPS configurado. A função callback para o
+      evento "message" lida com as respostas recebidas do servidor. Ela processa
+      as mensagens, extrai a ordem e a imagem correspondente, as exibe e
+      verifica se as respostas estão fora de ordem, mantendo estatísticas sobre
+      pacotes perdidos e fora de ordem. Ao final da execução do envio de mídia,
+      o código finaliza a janela de visualização, fecha o socket e exibe
+      estatísticas detalhadas sobre o desempenho da transmissão, como a
+      quantidade de pacotes perdidos e fora de ordem. O código proporciona uma
+      estrutura para envio de mídia via UDP, permitindo o controle de parâmetros
+      e a análise estatística do desempenho do envio em termos de integridade
+      dos pacotes recebidos. É possível ajustar as configurações para alcançar
+      diferentes taxas de quadros e durações de transmissão, atendendo às
+      necessidades específicas de transmissão de mídia para um servidor remoto.
+    </p>
+
+    <p>
+      <a
+        href="https://raw.githubusercontent.com/Gabriel-rd2/udp_client/master/udp_client.js"
+      >
+        udp_client.js
+      </a>
+    </p>
+    <iframe
+      src="https://drive.google.com/file/d/1fRzu1V-0NZxSTfbNtqHTWbbJIYsGqDmV/preview"
+      width="100%"
+      height="480"
+      allow="autoplay"
+    ></iframe>
+
+    <p>
+      <a
+        href="https://raw.githubusercontent.com/Gabriel-rd2/udp_server/master/udp_server.js"
+      >
+        udp_server.js
+      </a>
+    </p>
+    <iframe
+      src="https://drive.google.com/file/d/1FtKaLmChBCJmPdwonBeN5-1yeMiKQP8q/preview"
+      width="100%"
+      height="480"
+      allow="autoplay"
+    ></iframe>
+
+    <p>
+      O código em questão é um servidor UDP que recebe mídia do cliente,
+      processa a imagem para identificação de rostos e envia a imagem processada
+      de volta para o cliente. Este servidor foi desenvolvido como parte do
+      estudo da disciplina de Redes de Computadores II, sob a orientação do
+      Professor Elias P. Duarte Jr., e foi implementado pelo aluno Gabriel de
+      Almeida Sales Evaristo. Inicialmente, o código realiza a importação das
+      bibliotecas necessárias para seu funcionamento. Utiliza a biblioteca
+      "opencv4nodejs" para manipulação de imagens e reconhecimento facial, e
+      "node:dgram" para permitir a comunicação via protocolo UDP. Além disso,
+      faz uso da biblioteca "ip" para manipulação de endereços IP. A
+      configuração do servidor é definida com base no endereço IP local do host
+      e na porta 41234, permitindo que o servidor possa ser acessível por
+      clientes na mesma rede. O servidor mantém um registro dos endereços IP dos
+      clientes atendidos em um array denominado "clients". Ao iniciar o
+      servidor, são registrados diversos eventos para lidar com as diferentes
+      situações possíveis. O evento "listening" ocorre quando o servidor começa
+      a ouvir conexões, exibindo informações sobre o endereço e porta em que
+      está ativo. No evento "message", o servidor processa as mensagens
+      recebidas dos clientes. Recebe uma imagem codificada em base64, a
+      decodifica em um objeto OpenCV e realiza a detecção de rostos nessa
+      imagem. Em seguida, desenha retângulos ao redor dos rostos detectados. O
+      servidor prepara os dados da imagem processada e envia de volta para o
+      cliente. O servidor também monitora eventos de erro e de fechamento do
+      socket para gerenciar possíveis problemas durante a execução do programa.
+      Em caso de erro, é exibida uma mensagem indicando o problema e o socket é
+      fechado. Quando o socket é fechado, é exibido o número de clientes
+      atendidos e encerra-se a execução do programa. Ao ser inicializado, o
+      servidor exibe informações sobre o início da execução, incluindo detalhes
+      sobre a disciplina, o professor responsável e os dados do aluno
+      responsável pelo código. Todo o processo descrito é feito através da
+      chamada da função "start_server", que configura e inicia o servidor UDP
+      para lidar com a comunicação de mídia e reconhecimento facial entre
+      clientes e servidor.
+    </p>
+
+    <hr />
+    <h3>Logs</h3>
+  </body>
+</html>
